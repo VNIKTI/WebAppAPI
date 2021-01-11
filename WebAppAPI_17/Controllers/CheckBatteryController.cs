@@ -40,7 +40,7 @@ namespace WebAppAPI_17.Controllers
         public IHttpActionResult Get()
         {
             var jsondata = "{\"object1\":{\"Период отсутствия данных\": \"Секция тепловоза\"";
-            //comment
+            //co
 
             string _SQL1 = "", _SQL2 = "";
             string s = "";
