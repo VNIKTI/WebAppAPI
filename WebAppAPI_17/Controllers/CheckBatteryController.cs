@@ -115,23 +115,23 @@ namespace WebAppAPI_17.Controllers
             jsondata += "}}";
 
             //запись лог файла
-            
+
             return Json(jsondata);
         }
 
         // GET: api/CheckBattery/5
         public string Get(int id)
         {
-            return "value: "+id.ToString();
+            return "value: " + id.ToString();
         }
 
         // POST: api/CheckBattery
-        public void Post([FromBody]string value)
+        public void Post([FromBody] string value)
         {
         }
 
         // PUT: api/CheckBattery/5
-        public void Put(int id, [FromBody]string value)
+        public void Put(int id, [FromBody] string value)
         {
         }
 
