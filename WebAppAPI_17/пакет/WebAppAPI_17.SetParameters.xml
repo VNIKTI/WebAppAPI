@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<parameters>
+  <setParameter name="IIS Web Application Name" value="WebAppAPI_17" />
+  <setParameter name="DefaultConnection-Web.config Connection String" value="Data Source=DIA-BD;Initial Catalog=aspnet-WebAppAPI_17-20201120104210;User ID=dbadm;Password=ldonid6591" />
+  <setParameter name="DefaultConnection2-Web.config Connection String" value="Data Source=DIA-BD;Initial Catalog=diag_lcm;User ID=dbadm;Password=ldonid6591" />
+</parameters>

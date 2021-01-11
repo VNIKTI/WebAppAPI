@@ -1,0 +1,121 @@
+﻿<div class="jumbotron">
+    <h2>Приложение веб-служб Web API </h2>
+    <p class="lead">Приложение веб-служб предназначено для получения различных данных и взаимодействия с ними через функции API</p>
+    <p><a href="http://88.86.83.22:8183/Help" class="btn btn-primary btn-lg">Псмотреть подробное описание &raquo;</a></p>
+</div>
+<div class="row">
+    <div class="col-md-4">
+        <h4>Регистрация нового пользователя</h4>
+        <label>Введите email</label><br />
+        <input type="email" id="email" /> <br /><br />
+        <label>Введите пароль</label><br />
+        <input type="password" id="password" /><br /><br />
+        <label>Подтвердите пароль</label><br />
+        <input type="password" id="confirmpassword" /><br /><br />
+        <input class="btn btn-defaul" type="submit" id="submit" value="Регистрация" />
+    </div>
+    <div class="col-md-4">
+        <h4>Вход в приложение</h4>
+        <div class="userInfo" style="display:none;">
+            <p>Вы вошли как: <span class="userName"></span></p>
+            <input class="btn btn-defaul" type="button" value="Выйти" id="logOut" />
+        </div>
+        <div class="loginForm">
+            <label>Введите email</label><br />
+            <input type="email" id="emailLogin" /> <br /><br />
+            <label>Введите пароль</label><br />
+            <input type="password" id="passwordLogin" /><br /><br />
+            <input class="btn btn-defaul" type="submit" id="submitLogin" value="Логин" />
+        </div>
+    </div>
+    <div class="col-md-4">
+        <h4>Получить данные (метод GetValues)</h4>
+        <input class="btn btn-defaul" type="submit" id="getItemsButton" value="Получить данные" />
+    </div>
+</div>
+
+    @section scripts{
+        <script type="text/javascript">
+            //------------------------------------АУНТИФИКАЦИЯ
+            $(function () {
+                var tokenKey = "tokenInfo";
+                $('#submitLogin').click(function (e) {
+                    e.preventDefault();
+                    var loginData = {
+                        grant_type: 'password',
+                        username: $(' #emailLogin').val(),
+                        password: $('#passwordLogin').val()
+                    };
+
+                    $.ajax({
+                        type: 'POST',
+                        url: '/Token',
+                        data: loginData
+                    }).success(function (data) {
+                        $('.userName').text(data.userName);
+                        $('.userInfo').css('display', 'block');
+                        $('.loginForm').css('display', 'none');
+                        // сохраняем в хранилище sessionStorage токен доступа
+                        sessionStorage.setItem(tokenKey, data.access_token);
+                        console.log(data.access_token);
+                        alert(data.access_token);
+                    }).fail(function (data) {
+                        alert('При логине возникла ошибка');
+                        //alert(data);
+                    });
+                });
+
+                $('#logOut').click(function (e) {
+                    e.preventDefault();
+                    sessionStorage.removeItem(tokenKey);
+                    $('.userName').text('');
+                    $('.userInfo').css('display', 'none');
+                    $('.loginForm').css('display', 'inline');
+                });
+            })
+            //------------------------------------РЕГИСТРАЦИЯ
+            $(function () {
+                $('#submit').click(function (e) {
+                    e.preventDefault();
+                    var data = {
+                        Email: $('#email').val(),
+                        Password: $('#password').val(),
+                        ConfirmPassword: $('#confirmpassword').val()
+                    };
+
+                    $.ajax({
+                        type: 'POST',
+                        url: '/api/Account/Register',
+                        contentType: 'application/json; charset=utf-8',
+                        data: JSON.stringify(data)
+                    }).success(function (data) {
+                        alert("Регистрация пройдена");
+                    }).fail(function (data) {
+                        alert("В процесе регистрации возникла ошибка");
+                    });
+                });
+            })
+            //------------------------------------ЗАПРОС
+            $(function () {
+                var tokenKey = "tokenInfo";
+                //..................................
+                $('#getItemsButton').click(function (e) {
+                    e.preventDefault();
+                    $.ajax({
+                        type: 'GET',
+                        url: '/api/values/',
+                        beforeSend: function (xhr) {
+                            var token = sessionStorage.getItem(tokenKey);
+                            xhr.setRequestHeader("Authorization", "Bearer " + token);
+                        }
+                    }).success(function (data) {
+                        alert(data);
+                    }).fail(function (data) {
+                        alert('ERR Autorization');
+                        //alert(data);
+                    });
+
+                });
+            })
+        </script>
+    }
